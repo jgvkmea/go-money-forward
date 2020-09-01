@@ -34,9 +34,19 @@ func Server() {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					logger.Infof("Received text")
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
-						logger.Errorf("failed to send text: %v", err)
+					switch message.Text {
+					case "image":
+						GetAssetGraphImage()
+						resp := linebot.NewImageMessage("img/portfolio.png", "img/portfolio.png")
+						if _, err := bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
+							logger.Errorf("failed to send image: %v", err)
+						}
+					default:
+						logger.Infof("Received text")
+						resp := linebot.NewTextMessage(message.Text)
+						if _, err = bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
+							logger.Errorf("failed to send text: %v", err)
+						}
 					}
 				}
 			}
