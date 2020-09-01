@@ -8,6 +8,7 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
+// Server 起動
 func Server() {
 	bot, err := linebot.New(
 		os.Getenv(secretToken),
@@ -18,7 +19,7 @@ func Server() {
 	}
 
 	// Setup HTTP Server for receiving requests from LINE platform
-	http.HandleFunc("/moneyforwardfreec", func(w http.ResponseWriter, req *http.Request) {
+	http.HandleFunc("/moneyforwardfree", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
 		if err != nil {
 			if err == linebot.ErrInvalidSignature {
