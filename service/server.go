@@ -36,6 +36,7 @@ func Server() {
 				case *linebot.TextMessage:
 					switch message.Text {
 					case "image":
+						logger.Infof("Received text image")
 						GetAssetGraphImage()
 						resp := linebot.NewImageMessage("img/portfolio.png", "img/portfolio.png")
 						if _, err := bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
