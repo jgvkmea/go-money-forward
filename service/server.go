@@ -1,21 +1,20 @@
 package service
 
 import (
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/line/line-bot-sdk-go/linebot"
+	"github.com/sirupsen/logrus"
 )
 
 // Server 起動
 func Server() {
-	bot, err := linebot.New(
-		os.Getenv(secretToken),
-		os.Getenv(accessToken),
-	)
+	logger := logrus.New()
+
+	bot, err := linebot.New(secretToken, accessToken)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatalf("failed to set token to bot", err)
 	}
 
 	// Setup HTTP Server for receiving requests from LINE platform
@@ -23,8 +22,10 @@ func Server() {
 		events, err := bot.ParseRequest(req)
 		if err != nil {
 			if err == linebot.ErrInvalidSignature {
+				logger.Errorf("request invalid signature: %v", err)
 				w.WriteHeader(400)
 			} else {
+				logger.Errorf("failed to parse request: %v", err)
 				w.WriteHeader(500)
 			}
 			return
@@ -33,8 +34,9 @@ func Server() {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
+					logger.Infof("Received text")
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
-						log.Print(err)
+						logger.Errorf("failed to send text: %v", err)
 					}
 				}
 			}
@@ -43,6 +45,6 @@ func Server() {
 	// This is just sample code.
 	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
 	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
-		log.Fatal(err)
+		logger.Fatalf("failed to start server: %v", err)
 	}
 }
