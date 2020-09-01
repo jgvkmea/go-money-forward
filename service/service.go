@@ -10,7 +10,7 @@ import (
 func GetAssetGraphImage() {
 	logger := logrus.New()
 
-	driver := agouti.ChromeDriver()
+	driver := agouti.PhantomJS()
 	err := driver.Start()
 	if err != nil {
 		logger.Errorf("failed to start driver: %v", err)
