@@ -38,7 +38,7 @@ func Server() {
 					case "image":
 						logger.Infof("Received text image")
 						GetAssetGraphImage()
-						resp := linebot.NewImageMessage("img/portfolio.png", "img/portfolio.png")
+						resp := linebot.NewImageMessage("https://drive.google.com/file/d/1EQ7_bZDq9TvYbYUX3-1mgIFdDzm9l-if/view?usp=sharing", "https://drive.google.com/file/d/1EQ7_bZDq9TvYbYUX3-1mgIFdDzm9l-if/view?usp=sharing")
 						if _, err := bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
 							logger.Errorf("failed to send image: %v", err)
 						}

@@ -43,12 +43,12 @@ func GetAssetGraphImage() {
 	if err != nil {
 		logger.Errorf("failed to go portfolio page: %v", err)
 	}
-	portfolioPage.ScreenShot("img/portfolio.png")
+	portfolioPage.ScreenShot("img/portfolio.jpg")
 
 	// 推移スクショ
 	historyPage, err := portfolioPage.GoToHistoryPage()
 	if err != nil {
 		logger.Errorf("failed to go history page: %v", err)
 	}
-	historyPage.ScreenShot("img/history.png")
+	historyPage.ScreenShot("img/history.jpg")
 }
