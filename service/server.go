@@ -36,11 +36,18 @@ func Server() {
 				case *linebot.TextMessage:
 					switch message.Text {
 					case "image":
-						logger.Infof("Received text image")
+						logger.Infoln("Received text image")
 						GetAssetGraphImage()
 						resp := linebot.NewImageMessage("https://drive.google.com/file/d/1EQ7_bZDq9TvYbYUX3-1mgIFdDzm9l-if/view?usp=sharing", "https://drive.google.com/file/d/1EQ7_bZDq9TvYbYUX3-1mgIFdDzm9l-if/view?usp=sharing")
 						if _, err := bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
 							logger.Errorf("failed to send image: %v", err)
+						}
+					case "update":
+						logger.Infoln("Received text update")
+						UpdateBankData()
+						resp := linebot.NewTextMessage("Updating bank accounts.")
+						if _, err = bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
+							logger.Errorf("failed to sent text: %v", err)
 						}
 					default:
 						logger.Infof("Received text")

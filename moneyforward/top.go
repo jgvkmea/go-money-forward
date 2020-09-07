@@ -24,3 +24,12 @@ func (p *TopPage) GoToPortfolioPage() (*PortfolioPage, error) {
 	}
 	return newPortfolioPage(p.Page), nil
 }
+
+// GoToBankAccountPage 口座情報ページへ遷移
+func (p *TopPage) GoToBankAccountPage() (*BankAccountPage, error) {
+	err := p.Navigate(bankAccountURL)
+	if err != nil {
+		return nil, err
+	}
+	return newBankAccountPage(p.Page), nil
+}
