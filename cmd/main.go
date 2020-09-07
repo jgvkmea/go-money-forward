@@ -5,7 +5,5 @@ import (
 )
 
 func main() {
-	// service.GetAssetGraphImage()
-	// service.Server()
-	service.UpdateBankData()
+	service.Server()
 }
