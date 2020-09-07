@@ -44,7 +44,17 @@ func Server() {
 						}
 					case "update":
 						logger.Infoln("Received text update")
-						UpdateBankData()
+						err := UpdateBankData()
+						if err != nil {
+							logger.Errorf("failed to UpdateBankData: %v", err)
+							resp := linebot.NewTextMessage("Failed to update.")
+
+							if _, err = bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
+								logger.Errorf("failed to send text: %v", err)
+								return
+							}
+							return
+						}
 						resp := linebot.NewTextMessage("Updating bank accounts.")
 						if _, err = bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
 							logger.Errorf("failed to sent text: %v", err)

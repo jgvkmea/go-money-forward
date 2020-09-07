@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/jgvkmea/go-money-forward/moneyforward"
 	"github.com/sclevine/agouti"
 	"github.com/sirupsen/logrus"
@@ -57,48 +59,44 @@ func GetAssetGraphImage() {
 }
 
 // UpdateBankData 口座情報更新
-func UpdateBankData() {
+func UpdateBankData() error {
 	logger := logrus.New()
 	logger.Infoln("Start UpdateBankData()")
 
 	driver := agouti.PhantomJS()
 	err := driver.Start()
 	if err != nil {
-		logger.Errorf("failed to start driver: %v", err)
-		return
+		return fmt.Errorf("failed to start driver: %v", err)
 	}
 	defer driver.Stop()
 
 	page, err := driver.NewPage()
 	if err != nil {
-		logger.Errorf("failed to create page: %v", err)
-		return
+		return fmt.Errorf("failed to create page: %v", err)
 	}
 
 	// ログインページに遷移する
 	loginPage, err := moneyforward.GoToLoginPage(page)
 	if err != nil {
-		logger.Errorf("failed to go login page: %v", err)
-		return
+		return fmt.Errorf("failed to go login page: %v", err)
 	}
 
 	// ログイン
 	topPage, err := loginPage.Login(email, password)
 	if err != nil {
-		logger.Errorf("failed to login: %v", err)
-		return
+		return fmt.Errorf("failed to login: %v", err)
 	}
 
 	// 口座ページへ移動
 	bankAccountPage, err := topPage.GoToBankAccountPage()
 	if err != nil {
-		logger.Errorf("failed to go to bank account page: %v", err)
-		return
+		return fmt.Errorf("failed to go to bank account page: %v", err)
 	}
 
 	// 更新
 	err = bankAccountPage.UpdateBankAccounts()
 	if err != nil {
-		logger.Errorf("failed to update bank accounts: %v", err)
+		return fmt.Errorf("failed to update bank accounts: %v", err)
 	}
+	return nil
 }
