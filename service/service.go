@@ -11,7 +11,7 @@ func GetAssetGraphImage() {
 	logger := logrus.New()
 	logger.Infoln("Start GetAssetGraphImage()")
 
-	driver := agouti.ChromeDriver()
+	driver := agouti.PhantomJS()
 	err := driver.Start()
 	if err != nil {
 		logger.Errorf("failed to start driver: %v", err)
@@ -61,7 +61,7 @@ func UpdateBankData() {
 	logger := logrus.New()
 	logger.Infoln("Start UpdateBankData()")
 
-	driver := agouti.ChromeDriver()
+	driver := agouti.PhantomJS()
 	err := driver.Start()
 	if err != nil {
 		logger.Errorf("failed to start driver: %v", err)
