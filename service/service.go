@@ -2,10 +2,15 @@ package service
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/jgvkmea/go-money-forward/moneyforward"
 	"github.com/sclevine/agouti"
 	"github.com/sirupsen/logrus"
+)
+
+const (
+	userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:57.0) Gecko/20100101 Chrome/35.0.1916.114 Safari/537.36"
 )
 
 // GetAssetGraphImage 資産推移と割合のグラフをスクショして返す
@@ -63,7 +68,12 @@ func UpdateBankData() error {
 	logger := logrus.New()
 	logger.Infoln("Start UpdateBankData()")
 
-	driver := agouti.PhantomJS()
+	driver := agouti.ChromeDriver(
+		agouti.ChromeOptions("args", []string{
+			"--headless",
+			fmt.Sprintf("--user-agent=%s", userAgent),
+		}),
+	)
 	err := driver.Start()
 	if err != nil {
 		return fmt.Errorf("failed to start driver: %v", err)
@@ -80,12 +90,16 @@ func UpdateBankData() error {
 	if err != nil {
 		return fmt.Errorf("failed to go login page: %v", err)
 	}
+	title, _ := loginPage.Find(".p-user-sign-in > .for-x").Text()
+	fmt.Fprintf(os.Stdout, "login: %v\r\n", title)
 
 	// ログイン
 	topPage, err := loginPage.Login(email, password)
 	if err != nil {
 		return fmt.Errorf("failed to login: %v", err)
 	}
+	title, _ = topPage.Find(".global-menu > ul > li > .active").Text()
+	fmt.Fprintf(os.Stdout, "top: %v\r\n", title)
 
 	// 口座ページへ移動
 	bankAccountPage, err := topPage.GoToBankAccountPage()
