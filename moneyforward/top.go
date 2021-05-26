@@ -16,15 +16,6 @@ func newTopPage(page *agouti.Page) *TopPage {
 	return topPage
 }
 
-// GoToPortfolioPage 資産割合ページへ遷移
-func (p *TopPage) GoToPortfolioPage() (*PortfolioPage, error) {
-	err := p.Navigate(portfolioURL)
-	if err != nil {
-		return nil, err
-	}
-	return newPortfolioPage(p.Page), nil
-}
-
 // GoToBankAccountPage 口座情報ページへ遷移
 func (p *TopPage) GoToBankAccountPage() (*BankAccountPage, error) {
 	err := p.Navigate(bankAccountURL)

@@ -2,7 +2,6 @@ package moneyforward
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/sclevine/agouti"
 )
@@ -30,7 +29,6 @@ func (p *BankAccountPage) UpdateBankAccounts() error {
 
 	for i := 1; i < bankListCount; i++ {
 		id, err := bankList.At(i).Attribute("id")
-		fmt.Fprintf(os.Stdout, "id: %v", id)
 		if err != nil {
 			return fmt.Errorf("failed to get id: %v", err)
 		}
