@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"os"
 
 	"github.com/jgvkmea/go-money-forward/service"
 	"github.com/sirupsen/logrus"
@@ -23,6 +22,6 @@ func main() {
 	}
 
 	if err := service.UpdateBankData(*email, *password); err != nil {
-		log.Errorln(os.Stderr, "failed to update: ", err)
+		log.Errorln("failed to update: ", err)
 	}
 }
